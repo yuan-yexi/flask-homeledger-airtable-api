@@ -2,3 +2,5 @@
 venv
 flaskenv
 .env
+sample.json
+test.py
