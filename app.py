@@ -1,5 +1,6 @@
 import os
 import json
+import pandas as pd
 
 from flask import Flask, request, jsonify
 from pyairtable import Table
@@ -32,8 +33,25 @@ def getAirTablePriceList():
         tableRow['id'] = i['id']
         tableRow['createdTime'] = i['createdTime']
         priceList.append(tableRow)
+        
+    for i in airTableData:
+        tableRow = i['fields']
+    tableRow = i['fields']
+    tableRow['id'] = i['id']
+    tableRow['createdTime'] = i['createdTime']
+    priceList.append(tableRow)
+
+    # create dataframe to format date and sorty by formated_date by descending
+    dataframe = pd.DataFrame(priceList)
+    dataframe['formated_date'] = pd.to_datetime(dataframe['Date of Sale'], format='%b-%y')
+    dataframe.sort_values(by='formated_date', ascending=False, inplace=True)
+    dataframe.reset_index(inplace=True)
+    dataframe['No.'] = dataframe.index + 1
     
-    return jsonify(priceList) 
+    # convert dataframe back to json
+    fromat_price_list =  dataframe.to_json(orient="records")
+    
+    return fromat_price_list
     
 if __name__ == "__main__":
 	app.run()
