@@ -67,5 +67,8 @@ def getAirTablePriceList():
         
         return fromat_price_list
 
+    else:
+        return "table_id not found"
+
 if __name__ == "__main__":
 	app.run()
